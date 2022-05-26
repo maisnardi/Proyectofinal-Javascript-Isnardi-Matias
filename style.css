@@ -1,0 +1,100 @@
+/* Reseteo los valores por defecto */
+*{
+    margin: 0;
+    padding: 0;
+}
+.menuHamburguesa{
+    font-family:Arial, Helvetica, sans-serif;
+    width: 10%;
+    height: 9%;
+
+    position: fixed; /*en realidad es fixed*/
+    transition: .4s all;
+    z-index: 1;
+}
+
+.menuHamburguesa ul{
+    padding: 0;
+    text-align: center;
+}
+
+.menuHamburguesa li{
+    transition: .3s all;
+}
+
+.menuHamburguesa a{
+    text-decoration: none;
+    list-style: none;
+    transition: .3s all;
+    font-size: 0px;
+    padding: 0px;
+}
+
+.menuHamburguesa h2{
+    text-align: center;
+    color: white;
+    padding: 7px;
+    padding-bottom: 7px;
+
+    font-size: 0px;
+}
+
+.menuHamburguesa img{
+    padding-top: 30px;
+    padding-left: 10px;
+    max-width: 25%;
+    height: auto;
+}
+.menuHamburguesa:hover{
+    width: 17%;
+    height: 100%;
+    background-color: rgba(5,33,51,0.98);
+}
+.menuHamburguesa:hover h2{
+    padding: 15px;
+    font-size: 35px;
+}
+
+.menuHamburguesa:hover a{
+    font-size: 20px;
+    color: white;
+    display: block;
+    padding: 20px;
+}
+.menuHamburguesa:hover img{
+    height: 0px;
+}
+.menuHamburguesa:hover li{
+    border-top:1px solid black ;
+    width: 100%;
+}
+.menuHamburguesa:hover ul:last-of-type{
+    border-bottom: 1px solid black;
+}
+
+.menuHamburguesa:hover a:hover{
+    font-size: 25px;
+    padding: 30px 0;
+    background-color: rgba(22, 78, 112, 0.98);
+}
+
+.containerProductos{
+    position:absolute;
+    top:10%;
+    left:20%;
+}
+.containerProductos h2{
+    padding-bottom: 20px;
+}
+
+.card-text{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+   -webkit-line-clamp: 4;               /* Numero de lineas a mostrar */ 
+   -webkit-box-orient: vertical;
+}
+.price{
+    color: orange;
+    padding-bottom: 10px;
+}
