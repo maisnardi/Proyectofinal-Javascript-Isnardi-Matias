@@ -176,24 +176,36 @@ function MenuCompra(){          //Menú de compra
 
 function MenuPago() //Función que se encarga del pago en efectivo y con tarjeta
 {
+    const pago = document.createElement("div");
+    pago.setAttribute("id","pago")
+    pago.innerHTML=`Procesando pago`;
+    document.getElementById("test").appendChild(pago);
     if(Compra== true)               //si el usuario seleccionó correctamente un producto desde el menú
     {
         ModoPago = FormaDePago();   //la funcion Formadepago() devuelve la forma de pago seleccionada por el usaurio
         if(ModoPago == 1){          //Si el pago es en efectivo
             ValidarDinero(SolicitarDinero(ValorCompra), ValorCompra);
+            let mensaje = document.getElementById("pago");
+            mensaje.innerText="GRACIAS POR COMPRAR";
         }
         else if(ModoPago == 2){     //Si el pago es con tarjeta de crédito
             let ValorCompraConTarjeta= ValorCompra*1.1;             //Se agrega un 10% adicional
             let ValorCompraEnCuotas= ValorCompraConTarjeta/3;       //Se divide en 3 para obtener el valor de las cuotas
             let Mensaje = "El precio final es de $"+ValorCompraConTarjeta+" en 3 cuotas de $"+ValorCompraEnCuotas.toFixed(2);   //Con .tofixed(2 se musetran solo dos decimales)
             alert(Mensaje);
+            let mensaje = document.getElementById("pago");
+            mensaje.innerText="GRACIAS POR COMPRAR";
         }
         else{
             alert("Metodo de pago inválido");
+            let mensaje = document.getElementById("pago");
+            mensaje.innerText="Metodo de pago inválido";
         }
     }
     else{     
         alert("Compra cancelada"); //Si el usuario seleccionó una opcion incorrecta del menú se cancela la compra
+        let mensaje = document.getElementById("pago");
+            mensaje.innerText="Compra cancelada";
     }
 }
 
