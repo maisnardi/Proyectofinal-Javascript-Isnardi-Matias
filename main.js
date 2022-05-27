@@ -176,7 +176,7 @@ function MenuCompra(){          //Menú de compra
 
 function MenuPago() //Función que se encarga del pago en efectivo y con tarjeta
 {
-    const pago = document.createElement("div");
+    const pago = document.createElement("div");     //se crea el div de procesando pago cuando comienza el proceso de pago
     pago.setAttribute("id","pago")
     pago.innerHTML=`Procesando pago`;
     document.getElementById("test").appendChild(pago);
@@ -186,7 +186,7 @@ function MenuPago() //Función que se encarga del pago en efectivo y con tarjeta
         if(ModoPago == 1){          //Si el pago es en efectivo
             ValidarDinero(SolicitarDinero(ValorCompra), ValorCompra);
             let mensaje = document.getElementById("pago");
-            mensaje.innerText="GRACIAS POR COMPRAR";
+            mensaje.innerText="GRACIAS POR COMPRAR";        //luego de realizar el pago en efectivo se modifica el div
         }
         else if(ModoPago == 2){     //Si el pago es con tarjeta de crédito
             let ValorCompraConTarjeta= ValorCompra*1.1;             //Se agrega un 10% adicional
@@ -194,18 +194,18 @@ function MenuPago() //Función que se encarga del pago en efectivo y con tarjeta
             let Mensaje = "El precio final es de $"+ValorCompraConTarjeta+" en 3 cuotas de $"+ValorCompraEnCuotas.toFixed(2);   //Con .tofixed(2 se musetran solo dos decimales)
             alert(Mensaje);
             let mensaje = document.getElementById("pago");
-            mensaje.innerText="GRACIAS POR COMPRAR";
+            mensaje.innerText="GRACIAS POR COMPRAR";        //luego de realizar el pago en efectivo se modifica el div
         }
         else{
             alert("Metodo de pago inválido");
             let mensaje = document.getElementById("pago");
-            mensaje.innerText="Metodo de pago inválido";
+            mensaje.innerText="Metodo de pago inválido";    //si no se puede realizar el pago se modifica el div con el mismo mensaje del alert
         }
     }
     else{     
         alert("Compra cancelada"); //Si el usuario seleccionó una opcion incorrecta del menú se cancela la compra
         let mensaje = document.getElementById("pago");
-            mensaje.innerText="Compra cancelada";
+            mensaje.innerText="Compra cancelada";       //si se cancela pago se modifica el div con el mismo mensaje del alert
     }
 }
 
