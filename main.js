@@ -238,7 +238,7 @@ function MostrarCarrito(array)
             <div class="card-body">
             <h5 class="card-title">${items.marca} ${items.modelo}</h5>
             <h6>Color ${items.color}</h6>
-            <h3 class="units">Unidades: ${items.Unidades}</h3>
+            <h3 class="units">Unidades: ${items.unidades}</h3>
             <h3 class="price">Precio: $${items.precio}</h3>
             <a href="#" id="${items.tipo+items.id}" class="btn btn-primary">Eliminar</a>
             </div>
