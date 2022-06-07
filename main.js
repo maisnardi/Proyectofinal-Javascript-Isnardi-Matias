@@ -111,6 +111,21 @@ const telefonos=[
     }
 ]
 
+//Clases
+class Productos{
+    constructor(obj)
+    {
+        this.id=obj.id;
+        this.tipo=obj.tipo;
+        this.marca=obj.marca;
+        this.modelo=obj.modelo;
+        this.color=obj.color;
+        this.precio=obj.precio;
+        this.imagen=obj.imagen;
+        this.descripcion=obj.descripcion;
+        this.unidades=obj.unidades;
+    }
+}
 
 //Arrays
 const todosLosProductos=auriculares.concat(accesorios,telefonos);
@@ -174,10 +189,11 @@ botonCelulares.addEventListener("click",()=>{
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
 });
 
-let botonCarrito = document.getElementById("menuCarrito");
-botonCarrito.addEventListener("click", ()=>{
-    ocultarProductos("col");
+let botonCarrito = document.getElementById("menuCarrito");          //Botón Carrito
+botonCarrito.addEventListener("click", ()=>{                        
+    ocultarProductos("col");                                        //Oculto todos los productos disponibles en la pagina, del inicio
     MostrarCarrito(Carrito);
+    crearBotonesEliminar();
 })
 
 
@@ -206,9 +222,18 @@ function crearBotonesDeCompra(){
     todosLosProductos.forEach((producto)=>{
         const botonCarrito =document.getElementById(producto.id);
         botonCarrito.addEventListener("click",()=>{
-            indexProductos= todosLosProductos.findIndex(elemento=>elemento.id == producto.id);
-            todosLosProductos[indexProductos].unidades=1;
-            Carrito.push(todosLosProductos[indexProductos]);
+            indexProductos= todosLosProductos.findIndex(elemento=>elemento.id == producto.id); 
+            if(todosLosProductos[indexProductos].unidades === 0){
+                todosLosProductos[indexProductos].unidades+=1;
+                Carrito.push(todosLosProductos[indexProductos]);
+                carritoToJson(Carrito);    
+                
+            }
+            else{
+                todosLosProductos[indexProductos].unidades+=1;
+                carritoToJson(Carrito);    //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito    
+            }
+            
             console.log(Carrito);
         });
     });
@@ -219,20 +244,20 @@ crearBotonesDeCompra();
 //Funcion que muestra el carrito de compras
 function MostrarCarrito(array)
 {
-    const titulo= document.getElementById("titulo");
-    titulo.innerHTML="Carrito:"
-    if (Carrito.length===0)
+    const titulo= document.getElementById("titulo");            //Selecciono el titulo H2 de la página
+    titulo.innerHTML="Carrito:"                                 //modifico su mensaje
+    if (Carrito.length===0)                                     //Verifico si el carrito esta vacío, si lo esta
     {
-        let mensaje=document.createElement("h3");
-        mensaje.innerText="El carrito está vacío";
-        titulo.append(mensaje);
+        let mensaje=document.createElement("h3");               //creo un elemento nuevo H3
+        mensaje.innerText="El carrito está vacío";              //le asigno un contenido de ese elemento
+        titulo.append(mensaje);                                 //creo ese elemento dentro del HTML
     }
     else
    {
-    const app = document.getElementById("app");
-    for (const items of array) {
-        app.innerHTML += `
-        <div class="col ${items.tipo}">
+    const app = document.getElementById("app");                 //Selecciono el contenedor de los productos      
+    for (const items of array) {                                //Recorro el array de productos, y voy creando sus elementos en pantalla utilizando un template
+        app.innerHTML += `                                      
+        <div class="col" id="borra${items.modelo}">
         <div class="card" >
             <img src="${items.imagen}"  class="card-img-top" alt="...">
             <div class="card-body">
@@ -240,16 +265,89 @@ function MostrarCarrito(array)
             <h6>Color ${items.color}</h6>
             <h3 class="units">Unidades: ${items.unidades}</h3>
             <h3 class="price">Precio: $${items.precio}</h3>
-            <a href="#" id="${items.tipo+items.id}" class="btn btn-primary">Eliminar</a>
+            <a href="#" id="borra${items.id}" class="btn btn-primary">Eliminar</a>
             </div>
         </div>
         </div>
         `;
         }
-   }
-
-    
+   }   
 }
+//Funcion que crea los eventos de los botones eliminar
+function crearBotonesEliminar(){
+    Carrito.forEach((producto)=>{                                                           //Se crean los eventos de todos los botones eliminar de los productos del Carrito
+        const botonEliminar =document.getElementById(`borra${producto.id}`);
+        botonEliminar.addEventListener("click",()=>{
+            indexCarrito= Carrito.findIndex(elemento=>elemento.id == producto.id);          //Busco el index del producto del cual se presionó el botón
+            quitarUnidad(indexCarrito,producto);
+            verificarCarrito(); 
+            console.log(Carrito);
+        });        
+    });  
+}
+
+//Funcion que 
+function quitarUnidad(index,producto)
+{
+    if(Carrito[index].unidades>1)   //si las unidades de ese producto son mayores a 1
+    {
+        Carrito[index].unidades-=1; 
+        actualizarElementos();                                                  //actualizo las unidades en la pantalla
+        carritoToJson(Carrito);                                                 //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
+    }
+    else
+    {
+        Carrito.splice(index);                                                  //si se sacan todas las unidades de ese producto lo saco del carrito 
+        let eliminoItem=document.getElementById(`borra${producto.modelo}`);     
+        eliminoItem.remove(eliminoItem);                                        //lo elimino del DOM
+        carritoToJson(Carrito);                                                 //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
+    }
+}
+
+//Funcion que actualiza las unidades del carrito en pantalla
+function actualizarElementos()
+{
+    divs=document.getElementsByClassName("units");              //creo un array con todos los elementos HTML q se llaman units.
+    for(let a=0; a<Carrito.length;a++ )
+    {
+        divs[a].innerText= `Unidades: ${Carrito[a].unidades}`;  //Modifico el contenido de cada elemento units.
+    }
+}
+
+//funcion que verifica si el carrito esta vacio y crea un H3 con el mensaje que el carrito esta vacio.
+function verificarCarrito()
+{
+    if(Carrito.length===0)                          //si el carrito esta vacío
+    {
+    let mensaje=document.createElement("h3");       //creo un elemento H3
+    mensaje.innerText="El carrito está vacío";      //le asigno un contenido de ese elemento
+    titulo.append(mensaje);                         //creo ese elemento dentro del HTML
+    }
+}
+
+//funcion que pasa todos los elementos del carrito al localStorage
+function carritoToJson(array)
+{   
+    localStorage.clear();                                                               //funcion que reseteal el valor guardado en el localStorage
+    const guardarLocal= (clave, valor)=>{localStorage.setItem(clave,valor)};            
+    guardarLocal("ProductosCarrito",JSON.stringify(array));
+}
+
+//funcion que pasa los elementos del localStorage al carrito
+function JsonToCarrito(array)
+{
+    const almacenados = JSON.parse(localStorage.getItem("ProductosCarrito"));           //Recupero los datos del localStorage
+    if(almacenados != null)                                                             //Verifico si el array se encuentra vacío, si no lo esta
+    {
+        for(const producto of almacenados)                                              //Recorro el array
+        {
+            array.push(new Productos(producto));                                        //Coloco los ojetos del array obtenidos dentro del array Carrito
+        }
+        console.log(array);
+    }   
+}
+
+JsonToCarrito(Carrito);
 
 
 // //Carrito de compras
