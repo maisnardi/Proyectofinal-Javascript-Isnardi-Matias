@@ -4,40 +4,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Proyecto final Javascript</title>
-    <link rel="stylesheet" href="style.css">
-    <!--Toastify-->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <!--Bootstrap-->
+    <link rel="stylesheet" href="../style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   </head>
   <body>
     <!--Navbar-->
     <header>
         <div class="menuHamburguesa">
-            <h2>Menú<img src="img/menu.png" alt="menu hamburguesa"></h2>
+            <h2>Menú<img src="../img/menu.png" alt="menu hamburguesa"></h2>
             <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a id="menuBuscar" href="#">Buscar</a></li>
-                <li><a id="menuAuriculares" href="#">Auriculares</a></li>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a id="menuBuscar" href="../index.html">Buscar</a></li>
+                <li><a id="menuAuriculares" href="../index.html">Auriculares</a></li>
                 <li><a id="menuAccesorios" href="#">Accesorios</a></li>
                 <li><a id="menuCelulares" href="#">Celulares</a></li>
                 <li><a id="menuCarrito"href="#">Carrito</a></li>
             </ul>
         </div>
         <div class="contenedorCarrito">
-            <a id="linkCarritoUnidades" href="#"><img class="imagenCarrito" src="img/carrito-de-compras grande.png" alt=""></a>
+            <a id="linkCarritoUnidades" href="#"><img class="imagenCarrito" src="../img/carrito-de-compras grande.png" alt=""></a>
             <div class="unidadesCarrito">0</div>
         </div>
         <div class="containerProductos">
-            <h2 id="titulo">Productos:</h2>
-            <div id="app" class="row row-cols-1 row-cols-md-3 g-4"></div>
+            <h2 id="modeloProducto">Productos:</h2>
+            <div id="appProducto" class="row row-cols-1 row-cols-md-1 g-4"></div>
         </div>
-    <!--Javascript-->
-    <script src="JS/basededatos.js"></script>
-    <script src="main.js"></script>
-    <!--Bootstrap-->
+    
+    <script src="../main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-    <!--Toastify-->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   </body>
 </html>

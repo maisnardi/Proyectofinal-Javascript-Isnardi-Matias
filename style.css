@@ -8,7 +8,7 @@
     width: 10%;
     height: 9%;
 
-    position: fixed; /*en realidad es fixed*/
+    position: fixed;
     transition: .4s all;
     z-index: 1;
 }
@@ -78,6 +78,39 @@
     background-color: rgba(22, 78, 112, 0.98);
 }
 
+/*Icono carrito y unidades*/
+.imagenCarrito{
+    position: relative;
+    z-index: 1;
+    left: 90%;
+    top: 30px;
+    max-height: 43px;
+}
+
+.unidadesCarrito {
+    position: absolute;
+    z-index: 2;
+    left: 92%; 
+    top: 15px; 
+    opacity:0.9;
+    background-color: rgba(22, 78, 112, 0.98);
+    border: 2px solid white;
+    border-radius: 12px; 
+    box-shadow: 1px 1px 1px black;
+    color: white;
+    font: bold 15px/13px Helvetica, Verdana, Tahoma;
+    height: 26px; 
+    min-width: 26px;
+    padding: 4px 3px 0 3px;
+    text-align: center;
+}
+#linkCarritoUnidades{
+    height: 50px;
+    width: 50px;
+}
+
+
+/*Productos*/
 .containerProductos{
     position:absolute;
     top:10%;

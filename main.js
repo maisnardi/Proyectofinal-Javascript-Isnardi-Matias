@@ -1,116 +1,6 @@
 //variables globales
 let pagina="index";
 
-//Base de datos de productos
-const auriculares=[
-    {
-        id:"A001",
-        tipo:"Auriculares",
-        marca:"Sony",
-        modelo:"WH-1000XM4",
-        color:"blanco",
-        precio:48000,
-        imagen:"img/xm4-blancos.webp",
-        descripcion:"Los intuitivos e inteligentes audífonos WH-1000XM4 te ofrecen nuevas mejoras en la tecnología de noise cancelling líder del sector 1, una calidad de sonido excepcional y funciones de escucha inteligente que se ajustan al entorno y lo que estés haciendo.",
-        unidades:0
-    },
-    {
-        id:"A002",
-        tipo:"Auriculares",
-        marca:"Audio-Technica",
-        modelo:"ATH-M50xBT2",
-        color:"negro",
-        precio:55000,
-        imagen:"img/ath-m50xbt2_01_1.png",
-        descripcion:"Los ATH-M50xBT2 son la segunda generación de nuestra aclamada serie M de audífonos circumaurales inalámbricos. Cuentan con elementos de 45 mm de apertura grande en un diseño inalámbrico, para que los usuarios disfruten de la misma firma sonora de los legendarios audífonos de estudio ATH-M50x. Con esta actualización, también hemos introducido algunas importantes mejoras, por ejemplo, en la captación vocal, para disfrutar de llamadas de mayor calidad, una conexión USB-C actualizada y un modo de emparejamiento multipunto.",
-        unidades:0
-    },
-    {
-        id:"A003",
-        tipo:"Auriculares",
-        marca:"Audio-Technica",
-        modelo:"ATH-M20xBT",
-        color:"negro",
-        precio:13000,
-        imagen:"img/ath-m20xbt_01.png",
-        descripcion:"Los auriculares inalámbricos circumaurales ATH-M20xBT incluyen todas las funciones que desea y la calidad de audio que exige. Inspirados en nuestros #1 en ventas los ATH-M20x auriculares de estudio profesionales con cable y con potentes drivers de 40 mm para un rendimiento mejorado de baja frecuencia, los auriculares Bluetooth ATH-M20xBT ofrecen una experiencia auditiva increíble con audio de alta fidelidad de rango completo y graves mejorados.",
-        unidades:0
-    },
-    {
-        id:"A004",
-        tipo:"Auriculares",
-        marca:"Bose",
-        modelo:"Noise Cancelling Headphones 700",
-        color:"negro",
-        precio:50000,
-        imagen:"img/BoseNoiceCancelling700.jpeg",
-        descripcion:"Aclamados por la crítica debido a su potente reducción de ruido, un sonido asombroso y una recepción de voz inigualable, los audífonos Bose Noise Cancelling Headphones 700 ayudan a convertir cualquier espacio en un lugar perfecto para escuchar música, realizar tareas o sencillamente bloquear el mundo exterior para tener un momento de relajación. Así que si buscas los mejores audífonos Bluetooth inalámbricos para escuchar música y hacer llamadas, acabas de encontrarlos.",
-        unidades:0
-    }
-]
-
-const accesorios=[
-    {
-        id:"C001",
-        tipo:"Accesorios",
-        marca:"Xiaomi",
-        modelo:"Noise Cancelling Headphones 700",
-        color:"negro",
-        precio:6300,
-        imagen:"img/cargadorinalmbrico.jpg",
-        descripcion:"¡La increible potencia de 20W permite que el soporte llene instantáneamente su teléfono inteligente con energía! El funcionamiento silencioso con un sistema de refrigeración eficiente tiene un efecto positivo en la cultura laboral y la seguridad de la carga.",
-        unidades:0
-    },
-    {
-        id:"C002",
-        tipo:"Accesorios",
-        marca:"Xiaomi",
-        modelo:"Mi 50W Power Bank 20000",
-        color:"negro",
-        precio:14900,
-        imagen:"img/mi-50w-power-bank-20000.jpg",
-        descripcion:"Obtene acceso a energía limpia y ultrarrápida contenida en el Mi 50W Power Bank 20000mAh! La alta capacidad de la batería combinada con una velocidad de carga de hasta 50 W permite una carga casi instantánea.",
-        unidades:0
-    }
-
-]
-
-const telefonos=[
-    {
-        id:"T001",
-        tipo:"Celulares",
-        marca:"Xiaomi",
-        modelo:"11T 8GB RAM 256GB ROM",
-        color:"Meteorite Gray",
-        precio:139000,
-        imagen:"img/xiaomi-11t-8gb-ram-256gb-rom-meteorite-gray-.jpg",
-        descripcion:"¡El buque insignia Xiaomi 11T le permite cargar la batería al 100% en 36 minutos! Una experiencia excelente en la pantalla AdaptiveSync de 120 Hz es posible gracias al procesador superior MediaTek Dimensity 1200-Ultra.",
-        unidades:0
-    },
-    {
-        id:"T002",
-        tipo:"Celulares",
-        marca:"Apple",
-        modelo:"Iphone 13Pro MAX",
-        color:"Meteorite Gray",
-        precio:200000,
-        imagen:"img/iphone 13pro max.jpg",
-        descripcion:"La pantalla del iPhone 13 Pro Max tiene esquinas redondeadas que siguen el elegante diseño curvo del teléfono, y las esquinas se encuentran dentro de un rectángulo estándar. Si se mide en forma de rectángulo estándar, la pantalla tiene 6.68 pulgadas en diagonal (el área real de visualización es menor).",
-        unidades:0
-    },
-    {
-        id:"T003",
-        tipo:"Celulares",
-        marca:"Samsung",
-        modelo:"Galaxy S22 Ultra",
-        color:"Burgundy",
-        precio:250000,
-        imagen:"img/galaxys22ultra.webp",
-        descripcion:"Con un diseño de vanguardia, el celular Samsung Galaxy S22 Ultra es un teléfono único que ofrece una pantalla Dynamic AMOLED 2x con una resolución Quad HD+ sin Notch ni distracciones. Además, tiene 12GB de RAM y 256GB de almacenamiento.",
-        unidades:0
-    }
-]
-
 //Clases
 class Productos{
     constructor(obj)
@@ -132,7 +22,7 @@ const todosLosProductos=auriculares.concat(accesorios,telefonos);
 const Carrito =[];
 
 
-//Función que crea todos los productos en el HTML dependiendo de un array de productos
+//Función que crea todos los productos en el HTML del index dependiendo de un array de productos
 function crearProductos(array)
 {
     const titulo= document.getElementById("titulo");
@@ -140,12 +30,12 @@ function crearProductos(array)
     for (const items of array) {
         if(pagina==="index")
         {
-            titulo.innerText=`Productos:`; 
+            titulo.innerText=`Productos:`;
         }
         else{
             titulo.innerText=`${items.tipo+":"}`;
         }
-        
+
         app.innerHTML += `
         <div class="col ${items.tipo}">
         <div class="card" >
@@ -155,7 +45,14 @@ function crearProductos(array)
             <h6>Color ${items.color}</h6>
             <p class="card-text">${items.descripcion}</p>
             <h3 class="price">Precio: $${items.precio}</h3>
-            <a href="#" class="btn btn-primary">Ver producto</a>
+            <a href="pages/producto.html" id="P${items.id}"class="btn btn-primary">Ver producto</a>
+            <select name="Unidades" id="cantidad">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
             <a href="#" id="${items.id}" class="btn btn-primary">Agregar al carrito</a>
             </div>
         </div>
@@ -173,7 +70,7 @@ botonAuriculares.addEventListener("click",()=>{
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
 });
-let botonAccesorios = document.getElementById("menuAccesorios");   //Botón accesorios 
+let botonAccesorios = document.getElementById("menuAccesorios");   //Botón accesorios
 botonAccesorios.addEventListener("click",()=>{
     pagina="Accesorios";
     ocultarProductos("col");                                        //oculta todos los prodctos de la página
@@ -190,11 +87,19 @@ botonCelulares.addEventListener("click",()=>{
 });
 
 let botonCarrito = document.getElementById("menuCarrito");          //Botón Carrito
-botonCarrito.addEventListener("click", ()=>{                        
+botonCarrito.addEventListener("click", ()=>{
     ocultarProductos("col");                                        //Oculto todos los productos disponibles en la pagina, del inicio
     MostrarCarrito(Carrito);
     crearBotonesEliminar();
 })
+
+let botonCarritoUnidades = document.getElementById("linkCarritoUnidades");  //Botón Carrito
+botonCarritoUnidades.addEventListener("click", ()=>{
+    ocultarProductos("col");                                        //Oculto todos los productos disponibles en la pagina, del inicio
+    MostrarCarrito(Carrito);
+    crearBotonesEliminar();
+})
+
 
 
 //Funcion que oculta todos los elementos que tengan clase igual a opcion
@@ -222,19 +127,40 @@ function crearBotonesDeCompra(){
     todosLosProductos.forEach((producto)=>{
         const botonCarrito =document.getElementById(producto.id);
         botonCarrito.addEventListener("click",()=>{
-            indexProductos= todosLosProductos.findIndex(elemento=>elemento.id == producto.id); 
-            if(todosLosProductos[indexProductos].unidades === 0){
+            indexProductos= todosLosProductos.findIndex(elemento=>elemento.id == producto.id);
+            const indexCarrito= Carrito.findIndex(elemento=>elemento.id == producto.id);
+
+            if(indexCarrito==-1)
+            {
+
+                console.log("el pproducto no se encuentra en el carrito");
                 todosLosProductos[indexProductos].unidades+=1;
                 Carrito.push(todosLosProductos[indexProductos]);
-                carritoToJson(Carrito);    
-                
+                carritoToJson(Carrito);
             }
-            else{
-                todosLosProductos[indexProductos].unidades+=1;
-                carritoToJson(Carrito);    //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito    
+            else
+            {
+                console.log("ya hay unidades de ese producto en el carrito");
+                Carrito[indexCarrito].unidades+=1;
+                carritoToJson(Carrito);
             }
-            
-            console.log(Carrito);
+
+
+
+
+            // if(todosLosProductos[indexProductos].unidades === 0){
+            //     todosLosProductos[indexProductos].unidades+=1;
+            //     Carrito.push(todosLosProductos[indexProductos]);
+            //     carritoToJson(Carrito);                             //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
+
+            // }
+            // else{
+            //     todosLosProductos[indexProductos].unidades+=1;
+            //     carritoToJson(Carrito);                             //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
+            // }
+
+            // console.log(Carrito);
+             setUnidadesCarrito();
         });
     });
 };
@@ -254,9 +180,9 @@ function MostrarCarrito(array)
     }
     else
    {
-    const app = document.getElementById("app");                 //Selecciono el contenedor de los productos      
+    const app = document.getElementById("app");                 //Selecciono el contenedor de los productos
     for (const items of array) {                                //Recorro el array de productos, y voy creando sus elementos en pantalla utilizando un template
-        app.innerHTML += `                                      
+        app.innerHTML += `
         <div class="col" id="borra${items.modelo}">
         <div class="card" >
             <img src="${items.imagen}"  class="card-img-top" alt="...">
@@ -271,7 +197,7 @@ function MostrarCarrito(array)
         </div>
         `;
         }
-   }   
+   }
 }
 //Funcion que crea los eventos de los botones eliminar
 function crearBotonesEliminar(){
@@ -279,27 +205,31 @@ function crearBotonesEliminar(){
         const botonEliminar =document.getElementById(`borra${producto.id}`);
         botonEliminar.addEventListener("click",()=>{
             indexCarrito= Carrito.findIndex(elemento=>elemento.id == producto.id);          //Busco el index del producto del cual se presionó el botón
-            quitarUnidad(indexCarrito,producto);
-            verificarCarrito(); 
-            console.log(Carrito);
-        });        
-    });  
+            if(indexCarrito!=-1)
+            {
+                quitarUnidad(indexCarrito,producto);
+                verificarCarrito();
+                console.log(Carrito);
+                setUnidadesCarrito();
+            }
+        });
+    });
 }
 
-//Funcion que 
+//Funcion que elimina elementos del carrito
 function quitarUnidad(index,producto)
 {
-    if(Carrito[index].unidades>1)   //si las unidades de ese producto son mayores a 1
+    if(Carrito[index].unidades>1)                                               //si las unidades de ese producto son mayores a 1
     {
-        Carrito[index].unidades-=1; 
+        Carrito[index].unidades-=1;
         actualizarElementos();                                                  //actualizo las unidades en la pantalla
         carritoToJson(Carrito);                                                 //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
     }
     else
     {
-        Carrito.splice(index);                                                  //si se sacan todas las unidades de ese producto lo saco del carrito 
-        let eliminoItem=document.getElementById(`borra${producto.modelo}`);     
+        let eliminoItem=document.getElementById(`borra${producto.modelo}`);
         eliminoItem.remove(eliminoItem);                                        //lo elimino del DOM
+        Carrito.splice(index);                                                  //si se sacan todas las unidades de ese producto lo saco del carrito
         carritoToJson(Carrito);                                                 //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
     }
 }
@@ -327,28 +257,62 @@ function verificarCarrito()
 
 //funcion que pasa todos los elementos del carrito al localStorage
 function carritoToJson(array)
-{   
+{
     localStorage.clear();                                                               //funcion que reseteal el valor guardado en el localStorage
-    const guardarLocal= (clave, valor)=>{localStorage.setItem(clave,valor)};            
+    const guardarLocal= (clave, valor)=>{localStorage.setItem(clave,valor)};
     guardarLocal("ProductosCarrito",JSON.stringify(array));
 }
 
 //funcion que pasa los elementos del localStorage al carrito
 function JsonToCarrito(array)
 {
-    const almacenados = JSON.parse(localStorage.getItem("ProductosCarrito"));           //Recupero los datos del localStorage
-    if(almacenados != null)                                                             //Verifico si el array se encuentra vacío, si no lo esta
+    const almacenados = JSON.parse(localStorage.getItem("ProductosCarrito"));          //Recupero los datos del localStorage
+    for(objeto of almacenados)
     {
-        for(const producto of almacenados)                                              //Recorro el array
-        {
-            array.push(new Productos(producto));                                        //Coloco los ojetos del array obtenidos dentro del array Carrito
-        }
-        console.log(array);
-    }   
+        Carrito.push(new Productos(objeto));
+    }
+    console.log("carrito despues de obtener los datos del local storage");
+    console.log(Carrito);
 }
 
-JsonToCarrito(Carrito);
 
+JsonToCarrito(Carrito);
+setUnidadesCarrito();
+
+//funcion que recorre el carrito de compras y devuelve las unidades totales de elementos
+function getUnidadesCarrito(){
+    let acumulador=0;
+    Carrito.forEach((elemento)=>{
+        acumulador+=elemento.unidades;
+    })
+    return acumulador;
+}
+
+//funcion que modifica las unidades que se muestran en el carrito de compras del index
+function setUnidadesCarrito()
+{
+    let unidesCarrito = getUnidadesCarrito();
+    let mensajeCarrito = document.getElementsByClassName("unidadesCarrito");
+    mensajeCarrito[0].innerHTML=unidesCarrito;
+}
+
+//Toastify
+function animacionToastifyCarrito()
+{
+    todosLosProductos.forEach((producto)=>{
+        const botonCarrito =document.getElementById(producto.id);
+        botonCarrito.addEventListener("click",()=>{
+            Toastify({
+                text:"Producto agregado al carrito",
+                duration:3000,
+                gravity:"bottom",
+                position:"left",
+            }).showToast();
+        });
+    });
+}
+
+animacionToastifyCarrito();
 
 // //Carrito de compras
 // function AgregarAlCarrito(Productos){       //funcion que verifica si el producto se encuentra en el carrito, y si no lo esta lo agreguega
@@ -358,7 +322,7 @@ JsonToCarrito(Carrito);
 //         Carrito.push(Productos);
 //         console.log("los items de carrito son")
 //         console.log(Carrito);
-//     }    
+//     }
 // }
 
 
@@ -405,7 +369,7 @@ JsonToCarrito(Carrito);
 
 // // FUNCIONES
 // function MenuCompra(){          //Menú de compra
-//     let menu=Number(prompt(`Lista de productos:  
+//     let menu=Number(prompt(`Lista de productos:
 //     1. Auriculares,
 //     2. Cargador,
 //     3. Batería,
@@ -413,7 +377,7 @@ JsonToCarrito(Carrito);
 //     5. Quitar producto del carrito,
 //     6. Buscar por marca,
 //     7. Cancelar`));
-  
+
 //     switch(menu){
 //         case 1:
 //             alert("El valor unitario del producto es de $10,000");
@@ -492,7 +456,7 @@ JsonToCarrito(Carrito);
 //             mensaje.innerText="Metodo de pago inválido";    //si no se puede realizar el pago se modifica el div con el mismo mensaje del alert
 //         }
 //     }
-//     else{     
+//     else{
 //         alert("Compra cancelada"); //Si el usuario seleccionó una opcion incorrecta del menú se cancela la compra
 //         let mensaje = document.getElementById("pago");
 //             mensaje.innerText="Compra cancelada";       //si se cancela pago se modifica el div con el mismo mensaje del alert
@@ -509,7 +473,7 @@ JsonToCarrito(Carrito);
 // {
 //     Compra=true;
 //     Unidades=Number(prompt("Ingrese la cantidad de unidades deseadas"));
-//     if(isNaN(Unidades) || Unidades<0)         //Si el usuario ingresa un caracater aparece una alerta de Error y se cancela la compra. 
+//     if(isNaN(Unidades) || Unidades<0)         //Si el usuario ingresa un caracater aparece una alerta de Error y se cancela la compra.
 //     {
 //         alert("ERROR, dato no permitido.");
 //         Compra=false;
@@ -521,11 +485,11 @@ JsonToCarrito(Carrito);
 //         let Intentos=2;
 //         alert("La cantidad de unidades es muy baja, vuelva ingresar las unidades")
 //         while(Intentos>0)       //Le permite al usurio hacer dos intentos más
-//         {   
+//         {
 //             Unidades=Number(prompt("Ingrese la cantidad de unidades deseadas"));
 //             if( Unidades>0){
 //                 Intentos=0;
-//                 DatoValido=1;                
+//                 DatoValido=1;
 //             }
 //             else{
 //                 Intentos--;
@@ -543,8 +507,8 @@ JsonToCarrito(Carrito);
 //     }
 //     else                        //Si no devuelve la cantidad ingresada por el usaurio.
 //     {
-//         return Unidades         
-        
+//         return Unidades
+
 //     }
 // }
 
@@ -563,7 +527,7 @@ JsonToCarrito(Carrito);
 //     }
 //     else
 //     {
-//         alert("El dinero ingresado es insuficiente");   //El monto ingresado es inferior al de los productos 
+//         alert("El dinero ingresado es insuficiente");   //El monto ingresado es inferior al de los productos
 //     }
 // }
 
@@ -581,7 +545,7 @@ JsonToCarrito(Carrito);
 // //     if(!(Carrito.includes(Productos)))
 // //     {
 // //         Carrito.push(Productos);
-// //     }    
+// //     }
 // // }
 
 
@@ -612,7 +576,7 @@ JsonToCarrito(Carrito);
 //     {
 //         MenuCompra();
 //         VolverAComprar();
-//     }   
+//     }
 // }
 
 // function QuitarDelCarrito()                 //funcion que permite borra elementos del carrito
@@ -670,7 +634,7 @@ JsonToCarrito(Carrito);
 //         default:
 //             alert("Opción no valida");
 //             break;
-//     }                        
+//     }
 // }
 
 // function buscarMarca(array){            //funcion que busca en el array de productos por marca
