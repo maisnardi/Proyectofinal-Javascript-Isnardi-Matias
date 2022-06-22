@@ -1,5 +1,6 @@
 //variables globales
 let pagina="index";
+let divisa=1;
 
 //Clases
 class Productos{
@@ -17,10 +18,73 @@ class Productos{
     }
 }
 
-//Arrays
-const todosLosProductos=auriculares.concat(accesorios,telefonos);
-const Carrito =[];
+//API cotizacion dolar
+const cargarDatos = async () => {
+    try{
+        const url = "https://www.dolarsi.com/api/api.php?type=valoresprincipales";
+        const res = await fetch(url);
+        if(res.status===200)
+        {
+            const datos = await res.json();
+            pasarPreciosAPesos(datos[0].casa.venta);
+        }
 
+        } 
+     catch(res) {
+         console.log(res)
+     }
+  };
+  
+const cotizacion = cargarDatos();
+
+function pasarPreciosAPesos(cotizacion)
+{
+    console.log(cotizacion);
+    let cotizacionDolar=parseFloat(cotizacion.replace(',','.'))
+    console.log(cotizacionDolar);
+    todosLosProductos.forEach(productos => {
+    productos.precio=cotizacionDolar*productos.usd;
+    });   
+};
+
+//funcion que obtiene la divisa seleccionada en el menu deplegable
+function getSelectorDivisa()
+{
+    divisa = document.getElementById("moneda").value;
+}
+
+  
+
+    let select =document.querySelector("select");
+    select.addEventListener("change",()=>{
+        console.log(divisa);
+        let preciodolar=document.getElementsByClassName("priceUSD");
+        let preciopesos=document.getElementsByClassName("priceUSD");getSelectorDivisa();
+        if(divisa==="1")
+    {
+        console.log("entro en pesos")
+        for (let elemento of preciodolar)
+        {
+            console.log("oculto")
+            elemento.createElement("");
+        }
+        for (let elemento of preciopesos)
+        {
+            elemento.style.display="none";
+        }
+    }
+    else{
+        console.log("entro en doalres")
+        for (let elemento of preciodolar)
+        {
+            elemento.style.display="";
+        }
+        for (let elemento of preciopesos)
+        {
+            elemento.style.display="none";
+        }
+    } 
+    });    
 
 //Función que crea todos los productos en el HTML del index dependiendo de un array de productos
 function crearProductos(array)
@@ -45,6 +109,7 @@ function crearProductos(array)
             <h6>Color ${items.color}</h6>
             <p class="card-text">${items.descripcion}</p>
             <h3 class="price">Precio: $${items.precio}</h3>
+            <h3 class="priceUSD">Precio: $${items.usd}</h3>
             <a href="pages/producto.html" id="P${items.id}"class="btn btn-primary">Ver producto</a>
             <select name="Unidades" id="cantidad">
                 <option value="1">1</option>
@@ -59,6 +124,7 @@ function crearProductos(array)
         </div>
     `;
     }
+    ocultarValorTotalCarrito()                                      //se llama a la funcion que oculta el valor total del carrito
 }
 crearProductos(todosLosProductos);                                  //se llama a la funcion que crea todos los elementos HTML y se le pasa como argumento el array de todos los productos
 
@@ -98,6 +164,7 @@ botonCarritoUnidades.addEventListener("click", ()=>{
     ocultarProductos("col");                                        //Oculto todos los productos disponibles en la pagina, del inicio
     MostrarCarrito(Carrito);
     crearBotonesEliminar();
+    setValorTotalCarrito();                                         //funcion que crea el elemento que muestra el valor total del carrito
 })
 
 
@@ -127,45 +194,37 @@ function crearBotonesDeCompra(){
     todosLosProductos.forEach((producto)=>{
         const botonCarrito =document.getElementById(producto.id);
         botonCarrito.addEventListener("click",()=>{
-            indexProductos= todosLosProductos.findIndex(elemento=>elemento.id == producto.id);
-            const indexCarrito= Carrito.findIndex(elemento=>elemento.id == producto.id);
-
-            if(indexCarrito==-1)
+            indexProductos= todosLosProductos.findIndex(elemento=>elemento.id == producto.id);      //obtengo el index del producto dentro del array de todos los productos
+            const indexCarrito= Carrito.findIndex(elemento=>elemento.id == producto.id);            //obtengo el index del elemento dentro del carrito
+            if(indexCarrito==-1)                                                                    //Si no se encuentra en el carrito lo agrego
             {
-
-                console.log("el pproducto no se encuentra en el carrito");
-                todosLosProductos[indexProductos].unidades+=1;
-                Carrito.push(todosLosProductos[indexProductos]);
-                carritoToJson(Carrito);
+                Carrito.push(todosLosProductos[indexProductos]);                                    //hago el push del objeto dentro del array del carrito
+                Carrito[Carrito.length-1].unidades+=1;                                              //le sumo una unidad a ese articulo
+                carritoToJson(Carrito);                                                             //actualizo el carrito del localstorage
             }
-            else
+            else                                                                                    //si ya existe le agrego una unidad mas
             {
-                console.log("ya hay unidades de ese producto en el carrito");
-                Carrito[indexCarrito].unidades+=1;
-                carritoToJson(Carrito);
+                Carrito[indexCarrito].unidades+=1;                                                  //le sumo una unidad mas al producto
+                carritoToJson(Carrito);                                                             //actualizo el carrito del localstorage
             }
-
-
-
-
-            // if(todosLosProductos[indexProductos].unidades === 0){
-            //     todosLosProductos[indexProductos].unidades+=1;
-            //     Carrito.push(todosLosProductos[indexProductos]);
-            //     carritoToJson(Carrito);                             //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
-
-            // }
-            // else{
-            //     todosLosProductos[indexProductos].unidades+=1;
-            //     carritoToJson(Carrito);                             //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
-            // }
-
-            // console.log(Carrito);
-             setUnidadesCarrito();
+             setUnidadesCarrito();                                                                  //actualizo las unidades de la imagen del carrito
         });
     });
 };
 
 crearBotonesDeCompra();
+
+//Funcion que linkea los botones de ver producto con la inforomacion
+function crearBotonesVerProducto()
+{
+    todosLosProductos.forEach( (productos)=>{
+        const botonVerProducto=document.getElementById("P"+productos.id);
+        botonVerProducto.addEventListener("click",()=>{
+            productoToSessionStorage(productos);
+        });
+    });
+}
+crearBotonesVerProducto();
 
 //Funcion que muestra el carrito de compras
 function MostrarCarrito(array)
@@ -180,6 +239,7 @@ function MostrarCarrito(array)
     }
     else
    {
+    botonContinuarCompra();                                     //llamo a la funcion que crea el boton de continuar compra
     const app = document.getElementById("app");                 //Selecciono el contenedor de los productos
     for (const items of array) {                                //Recorro el array de productos, y voy creando sus elementos en pantalla utilizando un template
         app.innerHTML += `
@@ -191,7 +251,7 @@ function MostrarCarrito(array)
             <h6>Color ${items.color}</h6>
             <h3 class="units">Unidades: ${items.unidades}</h3>
             <h3 class="price">Precio: $${items.precio}</h3>
-            <a href="#" id="borra${items.id}" class="btn btn-primary">Eliminar</a>
+            <a href="#" id="borra${items.id}" class="btn btn-danger">Eliminar</a>
             </div>
         </div>
         </div>
@@ -201,16 +261,17 @@ function MostrarCarrito(array)
 }
 //Funcion que crea los eventos de los botones eliminar
 function crearBotonesEliminar(){
+    console.log(Carrito);
     Carrito.forEach((producto)=>{                                                           //Se crean los eventos de todos los botones eliminar de los productos del Carrito
         const botonEliminar =document.getElementById(`borra${producto.id}`);
         botonEliminar.addEventListener("click",()=>{
             indexCarrito= Carrito.findIndex(elemento=>elemento.id == producto.id);          //Busco el index del producto del cual se presionó el botón
-            if(indexCarrito!=-1)
-            {
-                quitarUnidad(indexCarrito,producto);
-                verificarCarrito();
-                console.log(Carrito);
-                setUnidadesCarrito();
+            if(indexCarrito!=-1)                                                            //Si el producto existe dentro del carrito
+            {   
+                quitarUnidad(indexCarrito,producto);                                        //llamo a la funcio que quita unidades del carrito.
+                verificarCarrito();                                                         //llamo a la funcion que verifica si el carrito esta vacio, si lo esta muestar el mensaje que el carrito esta vacio.
+                setUnidadesCarrito();                                                       //actualizo las unidades de la imagen del carrito
+                setValorTotalCarrito()                                                      //muestro el valor total de carrito en pantalla cada vez que elimino un
             }
         });
     });
@@ -219,18 +280,19 @@ function crearBotonesEliminar(){
 //Funcion que elimina elementos del carrito
 function quitarUnidad(index,producto)
 {
-    if(Carrito[index].unidades>1)                                               //si las unidades de ese producto son mayores a 1
+    if(Carrito[index].unidades<=1)                                                  //verifico si las unidades de ese producto son menores o iguales a 1
     {
-        Carrito[index].unidades-=1;
-        actualizarElementos();                                                  //actualizo las unidades en la pantalla
-        carritoToJson(Carrito);                                                 //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
+        Carrito[index].unidades=0;                                                  //si ese es el caso se bajan las unidades a 0
+        const eliminoItem=document.getElementById(`borra${producto.modelo}`);       //se selcciona el modelo a borrar
+        eliminoItem.remove(eliminoItem);                                            //lo elimino del DOM
+        Carrito.splice(index,1);                                                    //se elimina el elemento del carrito
+        carritoToJson(Carrito);                                                     //llamo a la funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
     }
     else
     {
-        let eliminoItem=document.getElementById(`borra${producto.modelo}`);
-        eliminoItem.remove(eliminoItem);                                        //lo elimino del DOM
-        Carrito.splice(index);                                                  //si se sacan todas las unidades de ese producto lo saco del carrito
-        carritoToJson(Carrito);                                                 //funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
+        Carrito[index].unidades-=1;                                                 //se elimina una unidad del prodcuto seleccionado
+        actualizarElementos();                                                      //llamo a la funcion que actualiza las unidades en la pantalla
+        carritoToJson(Carrito);                                                     //llamo a la funcion que vuelve a cargar los valores en el localStorage con los valores del carrito
     }
 }
 
@@ -281,11 +343,8 @@ setUnidadesCarrito();
 
 //funcion que recorre el carrito de compras y devuelve las unidades totales de elementos
 function getUnidadesCarrito(){
-    let acumulador=0;
-    Carrito.forEach((elemento)=>{
-        acumulador+=elemento.unidades;
-    })
-    return acumulador;
+    const prodctosReduce= Carrito.reduce((acc,elemento)=>acc+elemento.unidades,0,0);
+    return prodctosReduce;
 }
 
 //funcion que modifica las unidades que se muestran en el carrito de compras del index
@@ -314,331 +373,38 @@ function animacionToastifyCarrito()
 
 animacionToastifyCarrito();
 
-// //Carrito de compras
-// function AgregarAlCarrito(Productos){       //funcion que verifica si el producto se encuentra en el carrito, y si no lo esta lo agreguega
-//     if(!(Carrito.includes(Productos)))
-//     {
-//         alert("compra");
-//         Carrito.push(Productos);
-//         console.log("los items de carrito son")
-//         console.log(Carrito);
-//     }
-// }
+//Funcion que obtiene el valor total del carrito
+function getValorTotalCarrito()
+{
+    const sumaReduce = Carrito.reduce((acc,elemento)=>acc+((elemento.unidades)*elemento.precio),0,0);
+    return sumaReduce;
+}
 
+//Funcion que mustra en pantalla el valor total del carrito
+function setValorTotalCarrito()
+{
+    const costoCarrito = document.getElementById("precio");
+    costoCarrito.innerHTML="El valor total de carrito es: $"+getValorTotalCarrito();
+    costoCarrito.style.display="";
+}
 
+//funcion que oculta el valor total del carrito
+function ocultarValorTotalCarrito()
+{
+    const costoCarrito = document.getElementById("precio");
+    costoCarrito.style.display="none";
+}
 
+function botonContinuarCompra()
+{
+    const botonContinuarCompra= document.createElement("button");
+    botonContinuarCompra.setAttribute("id","botonContinuarCompra");
+    botonContinuarCompra.addEventListener("click",()=>{
+    });
+}
 
-
-// //Simulador
-// //variables
-// let CantidadUnidades=0;
-// let ValorCompra=0;
-// let ModoPago=0;
-// let Compra=false;
-// let SeguirComprando=0;
-
-// //Clases
-// class Productos{
-//     constructor(id,producto,marca,precio,cantidad)
-//     {
-//         this.id=id;
-//         this.producto=producto;
-//         this.marca=marca;
-//         this.precio=precio;
-//         this.cantidad=cantidad;
-//     }
-
-// }
-// //Obetos
-// const Auriculares = new Productos(001,"auriculares","sony",10000,0);
-// const Cargador = new Productos (002,"cargador","samsung",2000,0);
-// const Batería = new Productos(003,"batería", "xiaomi",5000,0);
-
-// //Arrays
-// //const Carrito =[];
-// const ArrayProductos=[Auriculares,Cargador,Batería];
-// console.log(ArrayProductos);
-
-// //Programa
-
-// // MenuCompra();
-// // VolverAComprar();
-// // ValorCompra=CostoDelCarrito();
-// // MenuPago();
-
-
-// // FUNCIONES
-// function MenuCompra(){          //Menú de compra
-//     let menu=Number(prompt(`Lista de productos:
-//     1. Auriculares,
-//     2. Cargador,
-//     3. Batería,
-//     4. Ver carrito,
-//     5. Quitar producto del carrito,
-//     6. Buscar por marca,
-//     7. Cancelar`));
-
-//     switch(menu){
-//         case 1:
-//             alert("El valor unitario del producto es de $10,000");
-//             CantidadUnidades=SolicitarUnidades();
-//             Auriculares.cantidad+=CantidadUnidades;
-//             AgregarAlCarrito(Auriculares);
-//             CantidadUnidades=0;
-//             break;
-//         case 2:
-//             alert("El valor unitario del producto es de $2000");
-//             CantidadUnidades=SolicitarUnidades();
-//             Cargador.cantidad+=CantidadUnidades;
-//             AgregarAlCarrito(Cargador);
-//             CantidadUnidades=0;
-//             break;
-//         case 3:
-//             alert("El valor unitario del producto es de $5000");
-//             CantidadUnidades=SolicitarUnidades();
-//             Batería.cantidad+=CantidadUnidades;
-//             AgregarAlCarrito(Batería);
-//             CantidadUnidades=0;
-//             break;
-//         case 4:
-//             if(Carrito.length===0)
-//             {
-//                 alert("El carrito esta vacío");
-//             }
-//             else
-//             {
-//                 MostrarCarrito(Carrito);
-//             }
-//             break;
-
-//         case 5:
-//             QuitarDelCarrito();
-//             break;
-//         case 6:
-//             buscarMarca(ArrayProductos);
-//             break;
-//         case 7:
-//             alert("Opción cancelada");
-//             Compra=false;
-//             break;
-//         default:
-//             alert("Opción no valida");
-//             Compra=false;
-//             break;
-//     }
-//   }
-
-// function MenuPago() //Función que se encarga del pago en efectivo y con tarjeta
-// {
-//     const pago = document.createElement("div");     //se crea el div de procesando pago cuando comienza el proceso de pago
-//     pago.setAttribute("id","pago")
-//     pago.innerHTML=`Procesando pago`;
-//     document.getElementById("test").appendChild(pago);
-//     if(Compra== true)               //si el usuario seleccionó correctamente un producto desde el menú
-//     {
-//         ModoPago = FormaDePago();   //la funcion Formadepago() devuelve la forma de pago seleccionada por el usaurio
-//         if(ModoPago == 1){          //Si el pago es en efectivo
-//             ValidarDinero(SolicitarDinero(ValorCompra), ValorCompra);
-//             let mensaje = document.getElementById("pago");
-//             mensaje.innerText="GRACIAS POR COMPRAR";        //luego de realizar el pago en efectivo se modifica el div
-//         }
-//         else if(ModoPago == 2){     //Si el pago es con tarjeta de crédito
-//             let ValorCompraConTarjeta= ValorCompra*1.1;             //Se agrega un 10% adicional
-//             let ValorCompraEnCuotas= ValorCompraConTarjeta/3;       //Se divide en 3 para obtener el valor de las cuotas
-//             let Mensaje = "El precio final es de $"+ValorCompraConTarjeta+" en 3 cuotas de $"+ValorCompraEnCuotas.toFixed(2);   //Con .tofixed(2 se musetran solo dos decimales)
-//             alert(Mensaje);
-//             let mensaje = document.getElementById("pago");
-//             mensaje.innerText="GRACIAS POR COMPRAR";        //luego de realizar el pago en efectivo se modifica el div
-//         }
-//         else{
-//             alert("Metodo de pago inválido");
-//             let mensaje = document.getElementById("pago");
-//             mensaje.innerText="Metodo de pago inválido";    //si no se puede realizar el pago se modifica el div con el mismo mensaje del alert
-//         }
-//     }
-//     else{
-//         alert("Compra cancelada"); //Si el usuario seleccionó una opcion incorrecta del menú se cancela la compra
-//         let mensaje = document.getElementById("pago");
-//             mensaje.innerText="Compra cancelada";       //si se cancela pago se modifica el div con el mismo mensaje del alert
-//     }
-// }
-
-// function SolicitarDinero(ValorCompra)   //Función que solicita el importe de dinero en efectivo al usaurio.
-// {
-//   let Dinero=Number(prompt("Ingrese $"+ValorCompra));
-//   return Dinero;
-// }
-
-//  function SolicitarUnidades()   //Función que solicita la cantidad de unidades.
-// {
-//     Compra=true;
-//     Unidades=Number(prompt("Ingrese la cantidad de unidades deseadas"));
-//     if(isNaN(Unidades) || Unidades<0)         //Si el usuario ingresa un caracater aparece una alerta de Error y se cancela la compra.
-//     {
-//         alert("ERROR, dato no permitido.");
-//         Compra=false;
-//         return 0
-//     }
-//     else if(Unidades == 0)      //Si las unidades seleccionadas por el usuario son 0
-//     {
-//         let DatoValido=0;
-//         let Intentos=2;
-//         alert("La cantidad de unidades es muy baja, vuelva ingresar las unidades")
-//         while(Intentos>0)       //Le permite al usurio hacer dos intentos más
-//         {
-//             Unidades=Number(prompt("Ingrese la cantidad de unidades deseadas"));
-//             if( Unidades>0){
-//                 Intentos=0;
-//                 DatoValido=1;
-//             }
-//             else{
-//                 Intentos--;
-//             }
-//         }
-//         if(DatoValido==1)
-//         {
-//             return Unidades;
-//         }
-//         else{
-//             alert("ERROR, dato no permitido. Compra cancelada");
-//             Compra=false;
-//             return 0
-//         }
-//     }
-//     else                        //Si no devuelve la cantidad ingresada por el usaurio.
-//     {
-//         return Unidades
-
-//     }
-// }
-
-// function ValidarDinero(MontoIngresado, ValorCompra){     //Función que valida el pago en efectivo. Dependiendo del valor ingresado mustra un mensaje.
-//     let Saldo=0;
-//     if(MontoIngresado>ValorCompra)    //El monto ingresado es suaperior al de los productos
-//     {
-//         alert("Gracias por su compra su vuelto es: $"+(MontoIngresado-ValorCompra));
-//     }
-//     else if (MontoIngresado == ValorCompra){  //El monto ingresado es igual al de los productos
-//         alert("Gracias por su compra");
-//     }
-//     else if (isNaN(MontoIngresado))           //Si el usaurio ingresa un caracter en vez de un número
-//     {
-//         alert("El importe ingresado no es un número");
-//     }
-//     else
-//     {
-//         alert("El dinero ingresado es insuficiente");   //El monto ingresado es inferior al de los productos
-//     }
-// }
-
-// function FormaDePago(){   //Funcion que ofrece las distintas formas de pago y devuelve la opción seleccionada por el usuario.
-//   alert("La forma de pago con tarjeta de credito tiene un recargo de 10% y 3 cuotas")
-//   let Pago=Number(prompt(`Ingrese la forma de pago:
-//   1. Efectivo
-//   2. Tarjeta de crédito en 3 cuotas`));
-//   return Pago;
-// }
-
-
-
-// // function AgregarAlCarrito(Productos){       //funcion que verifica si el producto se encuentra en el carrito, y si no lo esta lo agreguega
-// //     if(!(Carrito.includes(Productos)))
-// //     {
-// //         Carrito.push(Productos);
-// //     }
-// // }
-
-
-// function MostrarCarrito(carro)                   //funcion que muestra por consola los productos del carrito
-// {
-//     console.log(`Los productos del carrito son:`)
-//     carro.forEach(Productos => {
-//         console.log(Productos)
-//     });
-// }
-
-// function CostoDelCarrito()                  //funcion que recorre el array del carrito, devuelve el valor total de los productos del carrito
-// {
-//     let ValorTotalCompra=0;
-//     for(let i=0;i<Carrito.length;i++)
-//     {
-//         console.log(Carrito.length);
-//         ValorTotalCompra= ValorTotalCompra + ((Carrito[i].cantidad)*(Carrito[i].precio));
-//     }
-//     return ValorTotalCompra;
-
-// }
-// function VolverAComprar(){                  //funcion recurrente que le permite al usuario seguir comprando.
-//     SeguirComprando=Number(prompt(`Desea seguir comprando?
-//                                     1. SI
-//                                     2. NO`))
-//     if(SeguirComprando==1)
-//     {
-//         MenuCompra();
-//         VolverAComprar();
-//     }
-// }
-
-// function QuitarDelCarrito()                 //funcion que permite borra elementos del carrito
-// {
-//     let index=0;
-//     let unidadesAQuitar=0;
-//     let quitar= Number(prompt(`Seleccione el producto que desea eliminar del carrito:
-//                                 1. Auriculares,
-//                                 2. Cargador,
-//                                 3. Batería`));
-//     switch(quitar){
-//         case 1:
-//             if(Carrito.includes(Auriculares)){
-//                 unidadesAQuitar=Number(prompt("Cuántas unidades desea eliminar?"));
-//                 Auriculares.cantidad-=unidadesAQuitar;
-//                 if(Auriculares.cantidad<=0){        //Si la cantidad de productos es menor o igual a 0 se pone en 0 las unidades y se quita del array del carrito de compras
-//                     Auriculares.cantidad=0;
-//                     index=Carrito.indexOf(Auriculares);
-//                     Carrito.splice(index);
-
-//                 }
-//             }
-//             else{
-//                 alert("No hay auriculares en el carrito")
-//             }
-//             break;
-//         case 2:
-//             if(Carrito.includes(Cargador)){
-//                 unidadesAQuitar=Number(prompt("Cuántas unidades desea eliminar?"));
-//                 Cargador.cantidad-=unidadesAQuitar;
-//                 if(Cargador.cantidad<0){        //Si la cantidad de productos es menor o igual a 0 se pone en 0 las unidades y se quita del array del carrito de compras
-//                     Cargador.cantidad=0;
-//                     index=Carrito.indexOf(Cargador);
-//                     Carrito.splice(index);
-//                 }
-//                 }
-//             else{
-//                 alert("No hay cargadores en el carrito")
-//             }
-//             break;
-//         case 3:
-//              if(Carrito.includes(Batería)){
-//                 unidadesAQuitar=Number(prompt("Cuántas unidades desea eliminar?"));
-//                 Batería.cantidad-=unidadesAQuitar;
-//                 if(Batería.cantidad<0){     //Si la cantidad de productos es menor o igual a 0 se pone en 0 las unidades y se quita del array del carrito de compras
-//                     Batería.cantidad=0;
-//                     index=Carrito.indexOf(Batería);
-//                     Carrito.splice(index);
-//                 }
-//             }
-//             else{
-//                 alert("No hay baterias en el carrito")
-//             }
-//             break;
-//         default:
-//             alert("Opción no valida");
-//             break;
-//     }
-// }
-
-// function buscarMarca(array){            //funcion que busca en el array de productos por marca
-//     let marca= prompt("ingrese una marca");
-//     const productosEncontrados =array.filter((a)=>a.marca.includes(marca.toLocaleLowerCase()));
-//     console.log(productosEncontrados);
-// }
+function productoToSessionStorage(objeto)
+{   
+    const enJSON = JSON.stringify(objeto);          //transformo en el objeto en un string JSON
+    sessionStorage.setItem("producto",enJSON);      //guardo ese string en el sessionStorage
+}

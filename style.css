@@ -3,6 +3,8 @@
     margin: 0;
     padding: 0;
 }
+
+/*Menú lateral*/
 .menuHamburguesa{
     font-family:Arial, Helvetica, sans-serif;
     width: 10%;
@@ -77,6 +79,12 @@
     padding: 30px 0;
     background-color: rgba(22, 78, 112, 0.98);
 }
+/* Selector de divisa*/
+#selectorDivisa{
+    position: relative;
+    left: 80%;
+    top: 5%;
+}
 
 /*Icono carrito y unidades*/
 .imagenCarrito{
@@ -85,6 +93,9 @@
     left: 90%;
     top: 30px;
     max-height: 43px;
+}
+#moneda{
+    border-radius: 5%;
 }
 
 .unidadesCarrito {
@@ -109,7 +120,6 @@
     width: 50px;
 }
 
-
 /*Productos*/
 .containerProductos{
     position:absolute;
@@ -130,4 +140,43 @@
 .price{
     color: orange;
     padding-bottom: 10px;
+}
+
+
+/*Precio total productos*/
+#precio{
+    margin-top: 50px;
+    color: orange;
+}
+
+/*Elementos de porductos html*/
+#imagenProducto{
+    max-width: 400px;
+    max-width: auto;
+}
+
+#contenedorProducto{
+    max-width: 90%;
+}
+.carousel{
+    max-width: 400px;
+    min-width: 350px;
+}
+.carousel-inner{
+    border: 5px solid rgba(22, 78, 112, 0.98);
+    border-radius: 5px;
+}
+
+#contenedorProducto{
+    display: flex;
+    flex-direction: row;
+}
+
+#descripcion{
+    margin-top: 100px;
+    overflow:visible;
+}
+
+#botonCompra{
+    margin-top: 30px;
 }

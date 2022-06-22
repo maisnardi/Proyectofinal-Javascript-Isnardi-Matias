@@ -31,10 +31,17 @@
         <div class="containerProductos">
             <h2 id="titulo">Productos:</h2>
             <div id="app" class="row row-cols-1 row-cols-md-3 g-4"></div>
+            <h3 id="precio">El costo total del carrito es: $0</h3>
+        </div>
+        <div id="selectorDivisa">
+          <select name="divisa" id="moneda" onchange="getSelectorDivisa();">
+            <option value="1">Pesos</option>
+            <option value="2">U$D</option>
         </div>
     <!--Javascript-->
     <script src="JS/basededatos.js"></script>
     <script src="main.js"></script>
+    <script src="js/verproductos.js"></script>
     <!--Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <!--Toastify-->
