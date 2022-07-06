@@ -3,6 +3,9 @@
     margin: 0;
     padding: 0;
 }
+body {
+    overflow-x: hidden;
+}
 
 /*Menú lateral*/
 .menuHamburguesa{
@@ -120,6 +123,10 @@
     width: 50px;
 }
 
+.mCarritoVacio
+{
+    margin-top:20px;
+}
 /*Productos*/
 .containerProductos{
     position:absolute;
@@ -142,11 +149,15 @@
     padding-bottom: 10px;
 }
 
-
 /*Precio total productos*/
 #precio{
     margin-top: 50px;
     color: orange;
+}
+
+/*Boton continuar compra del carrito*/
+#btnContinuar{
+    margin-top: 20px;
 }
 
 /*Elementos de porductos html*/
@@ -179,4 +190,33 @@
 
 #botonCompra{
     margin-top: 30px;
+}
+
+/* Checkout HTML*/
+.contenedorFormulario{
+    position:absolute;
+    top:10%;
+    left:20%;
+    display: flex;
+    flex-direction: row;
+}
+
+.contenedorCarritoCheck{
+    opacity:0.9;
+    background-color: rgba(22, 78, 112, 0.98);
+    border: 2px solid white;
+    border-radius: 12px; 
+    box-shadow: 1px 1px 1px black;
+    color: white;
+    font: bold 15px/13px Helvetica, Verdana, Tahoma;
+    height: 26px; 
+    min-width: 26px;
+    padding: 4px 3px 0 3px;
+    text-align: center;
+}
+
+/*Buscador*/
+#contenedorBuscador{
+    width: 100%;
+    padding-bottom: 10px;
 }

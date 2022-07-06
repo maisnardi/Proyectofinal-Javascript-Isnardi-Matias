@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Proyecto final Javascript</title>
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
     <!--Toastify-->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -17,7 +18,6 @@
             <h2>Menú<img src="img/menu.png" alt="menu hamburguesa"></h2>
             <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a id="menuBuscar" href="#">Buscar</a></li>
                 <li><a id="menuAuriculares" href="#">Auriculares</a></li>
                 <li><a id="menuAccesorios" href="#">Accesorios</a></li>
                 <li><a id="menuCelulares" href="#">Celulares</a></li>
@@ -30,18 +30,22 @@
         </div>
         <div class="containerProductos">
             <h2 id="titulo">Productos:</h2>
+            <form  id="contenedorBuscador" class="col-12 col-lg-auto mb-3 mb-lg-2 me-lg-3" role="search">
+              <input type="search" id="buscador" class="form-control" placeholder="Buscar..." aria-label="Buscar">
+            </form>
             <div id="app" class="row row-cols-1 row-cols-md-3 g-4"></div>
             <h3 id="precio">El costo total del carrito es: $0</h3>
         </div>
         <div id="selectorDivisa">
           <select name="divisa" id="moneda" onchange="getSelectorDivisa();">
             <option value="1">Pesos</option>
-            <option value="2">U$D</option>
+            <option value="2">USD</option>
         </div>
     <!--Javascript-->
     <script src="JS/basededatos.js"></script>
     <script src="main.js"></script>
-    <script src="js/verproductos.js"></script>
+    <script src="js/producto.js"></script>
+    <script src="js/checkout.js"></script>
     <!--Bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <!--Toastify-->

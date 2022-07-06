@@ -1,6 +1,7 @@
 //variables globales
 let pagina="index";
-let divisa=1;
+let divisa=localStorage.getItem("moneda");
+let btnCompra=false;
 
 //Clases
 class Productos{
@@ -15,6 +16,7 @@ class Productos{
         this.imagen=obj.imagen;
         this.descripcion=obj.descripcion;
         this.unidades=obj.unidades;
+        this.usd=obj.usd;
     }
 }
 
@@ -31,10 +33,11 @@ const cargarDatos = async () => {
 
         } 
      catch(res) {
-         console.log(res)
+        console.log(res)
      }
-  };
-  
+};
+
+ocultarValorTotalCarrito();                                      //se llama a la funcion que oculta el valor total del carrito 
 const cotizacion = cargarDatos();
 
 function pasarPreciosAPesos(cotizacion)
@@ -43,49 +46,65 @@ function pasarPreciosAPesos(cotizacion)
     let cotizacionDolar=parseFloat(cotizacion.replace(',','.'))
     console.log(cotizacionDolar);
     todosLosProductos.forEach(productos => {
-    productos.precio=cotizacionDolar*productos.usd;
-    });   
+    productos.precio=(cotizacionDolar*productos.usd).toFixed(2);
+    });
+    crearProductos(todosLosProductos);                                  //se llama a la funcion que crea todos los elementos HTML y se le pasa como argumento el array de todos los productos
+    mostrarBarraBusqueda();                                                         //muestro la barra de busqueda
+
 };
 
 //funcion que obtiene la divisa seleccionada en el menu deplegable
 function getSelectorDivisa()
 {
-    divisa = document.getElementById("moneda").value;
+    divisa = document.getElementById("moneda").value;               //selecciono el elemento select
+    console.log("valor de la divisa");
+    console.log(divisa);
+    localStorage.setItem("moneda",divisa);                          //almaceno el valor tipo de moneda seleccionada en el localstorage. 1 para pesos 2 para dolares
+}
+getSelectorDivisa();
+// funcion que muestra los precios en dolares o en pesos
+function muestraPrecios()
+{
+    let select =document.querySelector("select");           //selecciono el elemento selector
+    select.value=divisa;
+    select.addEventListener("change",()=>{                  //cuando hay un cambio ejecuto las siguientes funciones
+        
+        let preciodolar=document.getElementsByClassName("priceUSD");    //obtego el array de elementos de precios en dolares
+        let preciopesos=document.getElementsByClassName("price");       //obtego el array de elementos de precios en pesos
+        if(select.value==="1")                                                //si divisa es 1 (valores en pesos) oculto los precios en dolares y muestro solo los valores en pesos
+        {
+            for (let elemento of preciopesos)
+            {
+                elemento.style.display="";
+            }
+            for (let elemento of preciodolar)
+            {
+                elemento.style.display="none";
+            }
+        }
+        else{                                                           //si el valor de divisa es distinto de 1 muestro solo los valores en dolares
+            for (let elemento of preciodolar)
+            {
+                elemento.style.display="";
+            }
+            for (let elemento of preciopesos)
+            {
+                elemento.style.display="none";
+            }
+        } 
+    });    
 }
 
-  
 
-    let select =document.querySelector("select");
-    select.addEventListener("change",()=>{
-        console.log(divisa);
-        let preciodolar=document.getElementsByClassName("priceUSD");
-        let preciopesos=document.getElementsByClassName("priceUSD");getSelectorDivisa();
-        if(divisa==="1")
+//funcion que oculta los valores en dolares
+function ocultarValoresDolares()
+{
+    let preciodolar=document.getElementsByClassName("priceUSD");    //obtego el array de elementos de precios en dolares
+    for (let elemento of preciodolar)
     {
-        console.log("entro en pesos")
-        for (let elemento of preciodolar)
-        {
-            console.log("oculto")
-            elemento.createElement("");
-        }
-        for (let elemento of preciopesos)
-        {
-            elemento.style.display="none";
-        }
-    }
-    else{
-        console.log("entro en doalres")
-        for (let elemento of preciodolar)
-        {
-            elemento.style.display="";
-        }
-        for (let elemento of preciopesos)
-        {
-            elemento.style.display="none";
-        }
-    } 
-    });    
-
+        elemento.style.display="none";
+    }   
+}
 //Función que crea todos los productos en el HTML del index dependiendo de un array de productos
 function crearProductos(array)
 {
@@ -101,32 +120,26 @@ function crearProductos(array)
         }
 
         app.innerHTML += `
-        <div class="col ${items.tipo}">
-        <div class="card" >
+        <div id="b${items.id}" class="col ${items.tipo}">
+        <div class="card d-flex justify-content-around h-100" >
             <img src="${items.imagen}"  class="card-img-top" alt="...">
             <div class="card-body">
             <h5 class="card-title">${items.marca} ${items.modelo}</h5>
             <h6>Color ${items.color}</h6>
             <p class="card-text">${items.descripcion}</p>
-            <h3 class="price">Precio: $${items.precio}</h3>
-            <h3 class="priceUSD">Precio: $${items.usd}</h3>
+            <h3 class="price">Precio: $${new Intl.NumberFormat('de-DE').format(items.precio)}</h3>
+            <h3 class="priceUSD">Precio: USD $${new Intl.NumberFormat('de-DE').format(items.usd)}</h3>
             <a href="pages/producto.html" id="P${items.id}"class="btn btn-primary">Ver producto</a>
-            <select name="Unidades" id="cantidad">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
             </select>
-            <a href="#" id="${items.id}" class="btn btn-primary">Agregar al carrito</a>
+            <a id="${items.id}" class="btn btn-primary">Agregar al carrito</a>
             </div>
         </div>
         </div>
     `;
     }
-    ocultarValorTotalCarrito()                                      //se llama a la funcion que oculta el valor total del carrito
+    ocultarValoresDolares();                                         //llamo a la funcion que oculta los valores en dolares   
+    ejecutarFunciones();                                             //llamo a la funcion que ejecuta varias funciones
 }
-crearProductos(todosLosProductos);                                  //se llama a la funcion que crea todos los elementos HTML y se le pasa como argumento el array de todos los productos
 
 //botones del menú lateral
 let botonAuriculares = document.getElementById("menuAuriculares");  //Botón auriculares
@@ -135,6 +148,7 @@ botonAuriculares.addEventListener("click",()=>{
     ocultarProductos("col");                                        //oculta todos los prodctos de la página
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
+    mostrarBarraBusqueda()                                          //muestro la barra de busqueda
 });
 let botonAccesorios = document.getElementById("menuAccesorios");   //Botón accesorios
 botonAccesorios.addEventListener("click",()=>{
@@ -142,6 +156,8 @@ botonAccesorios.addEventListener("click",()=>{
     ocultarProductos("col");                                        //oculta todos los prodctos de la página
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
+    mostrarBarraBusqueda()                                          //muestro la barra de busqueda
+
 });
 
 let botonCelulares = document.getElementById("menuCelulares");      //Botón teléfonos
@@ -150,24 +166,26 @@ botonCelulares.addEventListener("click",()=>{
     ocultarProductos("col");                                        //oculta todos los prodctos de la página
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
+    mostrarBarraBusqueda()                                          //muestro la barra de busqueda
 });
 
 let botonCarrito = document.getElementById("menuCarrito");          //Botón Carrito
 botonCarrito.addEventListener("click", ()=>{
     ocultarProductos("col");                                        //Oculto todos los productos disponibles en la pagina, del inicio
-    MostrarCarrito(Carrito);
-    crearBotonesEliminar();
+    MostrarCarrito(Carrito);                                        //muestro los elementos del carrito
+    crearBotonesEliminar();                                         //creo los botones para eliminar el producto del carrito
+    setValorTotalCarrito();                                         //funcion que crea el elemento que muestra el valor total del carrito
+    ocultarBarraBusqueda();                                         //oculto la barra de busqueda
 })
 
 let botonCarritoUnidades = document.getElementById("linkCarritoUnidades");  //Botón Carrito
 botonCarritoUnidades.addEventListener("click", ()=>{
-    ocultarProductos("col");                                        //Oculto todos los productos disponibles en la pagina, del inicio
-    MostrarCarrito(Carrito);
-    crearBotonesEliminar();
-    setValorTotalCarrito();                                         //funcion que crea el elemento que muestra el valor total del carrito
+    ocultarProductos("col");                                                //Oculto todos los productos disponibles en la pagina, del inicio
+    MostrarCarrito(Carrito);                                                //muestro los elementos del carrito
+    crearBotonesEliminar();                                                 //creo los botones para eliminar el producto del carrito
+    setValorTotalCarrito();                                                 //funcion que crea el elemento que muestra el valor total del carrito
+    ocultarBarraBusqueda();                                                 //oculto la barra de busqueda
 })
-
-
 
 //Funcion que oculta todos los elementos que tengan clase igual a opcion
 function ocultarProductos(opcion)
@@ -212,7 +230,7 @@ function crearBotonesDeCompra(){
     });
 };
 
-crearBotonesDeCompra();
+
 
 //Funcion que linkea los botones de ver producto con la inforomacion
 function crearBotonesVerProducto()
@@ -224,16 +242,18 @@ function crearBotonesVerProducto()
         });
     });
 }
-crearBotonesVerProducto();
+
 
 //Funcion que muestra el carrito de compras
 function MostrarCarrito(array)
 {
+    
     const titulo= document.getElementById("titulo");            //Selecciono el titulo H2 de la página
     titulo.innerHTML="Carrito:"                                 //modifico su mensaje
     if (Carrito.length===0)                                     //Verifico si el carrito esta vacío, si lo esta
     {
         let mensaje=document.createElement("h3");               //creo un elemento nuevo H3
+        mensaje.id=("mCarritoVacio")                            //creo una id para el elemento
         mensaje.innerText="El carrito está vacío";              //le asigno un contenido de ese elemento
         titulo.append(mensaje);                                 //creo ese elemento dentro del HTML
     }
@@ -244,21 +264,23 @@ function MostrarCarrito(array)
     for (const items of array) {                                //Recorro el array de productos, y voy creando sus elementos en pantalla utilizando un template
         app.innerHTML += `
         <div class="col" id="borra${items.modelo}">
-        <div class="card" >
+        <div class="card d-flex justify-content-around h-100" >
             <img src="${items.imagen}"  class="card-img-top" alt="...">
             <div class="card-body">
             <h5 class="card-title">${items.marca} ${items.modelo}</h5>
             <h6>Color ${items.color}</h6>
             <h3 class="units">Unidades: ${items.unidades}</h3>
-            <h3 class="price">Precio: $${items.precio}</h3>
+            <h3 class="price">Precio: $${new Intl.NumberFormat('de-DE').format(items.precio)}</h3>
             <a href="#" id="borra${items.id}" class="btn btn-danger">Eliminar</a>
             </div>
         </div>
         </div>
         `;
         }
+        
    }
 }
+
 //Funcion que crea los eventos de los botones eliminar
 function crearBotonesEliminar(){
     console.log(Carrito);
@@ -269,8 +291,8 @@ function crearBotonesEliminar(){
             if(indexCarrito!=-1)                                                            //Si el producto existe dentro del carrito
             {   
                 quitarUnidad(indexCarrito,producto);                                        //llamo a la funcio que quita unidades del carrito.
-                verificarCarrito();                                                         //llamo a la funcion que verifica si el carrito esta vacio, si lo esta muestar el mensaje que el carrito esta vacio.
                 setUnidadesCarrito();                                                       //actualizo las unidades de la imagen del carrito
+                verificarCarrito();                                                         //llamo a la funcion que verifica si el carrito esta vacio, si lo esta muestar el mensaje que el carrito esta vacio.
                 setValorTotalCarrito()                                                      //muestro el valor total de carrito en pantalla cada vez que elimino un
             }
         });
@@ -314,16 +336,19 @@ function verificarCarrito()
     let mensaje=document.createElement("h3");       //creo un elemento H3
     mensaje.innerText="El carrito está vacío";      //le asigno un contenido de ese elemento
     titulo.append(mensaje);                         //creo ese elemento dentro del HTML
+    ocultarValorTotalCarrito();
+    ocultarBotonContinuarCompra();
     }
 }
 
 //funcion que pasa todos los elementos del carrito al localStorage
 function carritoToJson(array)
 {
-    localStorage.clear();                                                               //funcion que reseteal el valor guardado en el localStorage
+    localStorage.clear();                                                               //funcion que resetea el valor guardado en el localStorage
     const guardarLocal= (clave, valor)=>{localStorage.setItem(clave,valor)};
     guardarLocal("ProductosCarrito",JSON.stringify(array));
 }
+
 
 //funcion que pasa los elementos del localStorage al carrito
 function JsonToCarrito(array)
@@ -331,26 +356,34 @@ function JsonToCarrito(array)
     const almacenados = JSON.parse(localStorage.getItem("ProductosCarrito"));          //Recupero los datos del localStorage
     for(objeto of almacenados)
     {
-        Carrito.push(new Productos(objeto));
+        array.push(new Productos(objeto));
     }
     console.log("carrito despues de obtener los datos del local storage");
-    console.log(Carrito);
+    console.log(array);
 }
-
-
-JsonToCarrito(Carrito);
-setUnidadesCarrito();
 
 //funcion que recorre el carrito de compras y devuelve las unidades totales de elementos
 function getUnidadesCarrito(){
     const prodctosReduce= Carrito.reduce((acc,elemento)=>acc+elemento.unidades,0,0);
     return prodctosReduce;
 }
+//funcion que guarda en el localStorage las unidades del carrito
+function setUnidadesLocalStorage(unidades)
+{
+    localStorage.setItem("unidades",unidades); 
+}
+//funcion que obtiene las unidades del carrito del localStorage
+function getUnidadesLocalStorage()
+{
+    let unidades=localStorage.getItem("unidades");
+    return Number(unidades);
+}
 
 //funcion que modifica las unidades que se muestran en el carrito de compras del index
 function setUnidadesCarrito()
 {
     let unidesCarrito = getUnidadesCarrito();
+    setUnidadesLocalStorage(unidesCarrito);
     let mensajeCarrito = document.getElementsByClassName("unidadesCarrito");
     mensajeCarrito[0].innerHTML=unidesCarrito;
 }
@@ -371,20 +404,18 @@ function animacionToastifyCarrito()
     });
 }
 
-animacionToastifyCarrito();
-
 //Funcion que obtiene el valor total del carrito
 function getValorTotalCarrito()
 {
     const sumaReduce = Carrito.reduce((acc,elemento)=>acc+((elemento.unidades)*elemento.precio),0,0);
-    return sumaReduce;
+    return sumaReduce.toFixed(2);
 }
 
 //Funcion que mustra en pantalla el valor total del carrito
 function setValorTotalCarrito()
 {
     const costoCarrito = document.getElementById("precio");
-    costoCarrito.innerHTML="El valor total de carrito es: $"+getValorTotalCarrito();
+    costoCarrito.innerHTML="Valor de la compra: $"+new Intl.NumberFormat('de-DE').format(getValorTotalCarrito());
     costoCarrito.style.display="";
 }
 
@@ -395,16 +426,103 @@ function ocultarValorTotalCarrito()
     costoCarrito.style.display="none";
 }
 
+//funcion que crea el boton de continuar compra
 function botonContinuarCompra()
 {
-    const botonContinuarCompra= document.createElement("button");
-    botonContinuarCompra.setAttribute("id","botonContinuarCompra");
-    botonContinuarCompra.addEventListener("click",()=>{
-    });
+    if(btnCompra==false)                                                                    //verifico si el boton de compra se encuentra creado
+    {
+        const contenedor = document.getElementsByClassName("containerProductos");           //selecciono al elemento contenedor
+        const botonContinuarCompra = document.createElement("a");                           //creo un elemento a
+        botonContinuarCompra.href="pages/checkout.html";                                    //le asigno un link
+        botonContinuarCompra.role="button";                                                 //le asigno un rol button
+        botonContinuarCompra.className="btn btn-primary btn-lg";                            //le asigno las clases de bootstrap
+        botonContinuarCompra.id="btnContinuar";                                             //le asigno un id
+        botonContinuarCompra.innerHTML=`Continuar con la compra`;                           //le asigno un texto al boton
+        contenedor[0].append(botonContinuarCompra);                                         //lo pego al final del elemento contenedor
+        btnCompra=true;                                                                     //btnCompra para q no lo cree mas de una vez
+    }
+}
+//funcion que elimina el boton en caso de que el carrito este vacio
+function ocultarBotonContinuarCompra()
+{
+    const contenedor = document.getElementById("btnContinuar");         //Selecciono el elemento
+    contenedor.style.display="none";                                    //lo oculto
 }
 
+//funcion que pasa el producto el cual se quiere ver al sessionStorage
 function productoToSessionStorage(objeto)
 {   
     const enJSON = JSON.stringify(objeto);          //transformo en el objeto en un string JSON
     sessionStorage.setItem("producto",enJSON);      //guardo ese string en el sessionStorage
 }
+
+//funcion que agrupa varias funciones para facilitar el llamado
+function ejecutarFunciones()
+{
+    muestraPrecios();
+    crearBotonesDeCompra();
+    crearBotonesVerProducto();
+    JsonToCarrito(Carrito);
+    setUnidadesCarrito();
+    animacionToastifyCarrito();
+}
+
+//funcion que inicializa la key del local storage de productos carrito, si no existe crea el array vacio si no no hace nada
+function inicializarLocalStorage()
+{
+    if(localStorage.getItem("ProductosCarrito")===null)         //verifico si existe el carrito de compras en el localStorage si no existe lo inicializo vacio
+    {
+        localStorage.setItem("ProductosCarrito",JSON.stringify([]));
+    }
+    if(localStorage.getItem("moneda")===null)         //verifico si existe el carrito de compras en el localStorage si no existe lo inicializo vacio
+    {
+        localStorage.setItem("moneda",JSON.stringify(1));
+        const moneda=document.getElementById("moneda");
+        moneda.value=Number(localStorage.getItem("moneda"));
+    }
+}
+
+inicializarLocalStorage();
+
+
+
+//funcion para buscar productos en la pagina, puede ser por marca o modelo
+function buscar()
+{
+    const palabraABuscar=document.getElementById("buscador");                       //selecciono el elemento input del buscador
+    palabraABuscar.addEventListener("input", (e)=>{                                 //analizo cada cambio sobre el input
+        todosLosProductos.forEach(elementos =>{
+            document.getElementById(`b${elementos.id}`).style.display="none";
+        });
+        const valor=e.target.value.toLowerCase();                                   //el string ingresado lo transformo a lowercase y lo guardo en valor
+        console.log(valor);
+        productos.forEach(producto =>{                                             //analizo todos los elememtos del array
+            const visible = producto.marca.toLowerCase().includes(valor)|| producto.modelo.toLowerCase().includes(valor);       //filtro por marca y modelo 
+            if(visible){                                                            //si hay algun resultado
+                if(document.getElementById(`b${producto.id}`))                      //verifico si el producto esta creado
+                {   
+                    document.getElementById(`b${producto.id}`).style.display="";    //muestro el producto que concide con la busqueda           
+                }
+            }
+        }) 
+    })
+    let productos = todosLosProductos.map(producto=>{                               //con la funcion map creo un nuevo array solo con alguna info de los objetos del array original
+    return {id: producto.id, tipo: producto.tipo, marca: producto.marca, modelo: producto.modelo}
+    })
+}
+
+buscar();
+ocultarBarraBusqueda();
+//funcion que oculta la barra de busqueda
+function ocultarBarraBusqueda()
+{
+    const containerBuscador=document.getElementById("contenedorBuscador");                       //selecciono el container del buscador
+    containerBuscador.style.display="none";
+}
+//funcion que muestra la barra de busqueda
+function mostrarBarraBusqueda()
+{
+    const containerBuscador=document.getElementById("contenedorBuscador");                       //selecciono el container del buscador
+    containerBuscador.style.display="";
+}
+
