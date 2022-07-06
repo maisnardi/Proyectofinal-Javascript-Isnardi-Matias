@@ -149,6 +149,7 @@ botonAuriculares.addEventListener("click",()=>{
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
     mostrarBarraBusqueda()                                          //muestro la barra de busqueda
+    ocultarValorTotalCarrito()                                      //oculto el mensaje de valor total carrito
 });
 let botonAccesorios = document.getElementById("menuAccesorios");   //Botón accesorios
 botonAccesorios.addEventListener("click",()=>{
@@ -157,6 +158,7 @@ botonAccesorios.addEventListener("click",()=>{
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
     mostrarBarraBusqueda()                                          //muestro la barra de busqueda
+    ocultarValorTotalCarrito()                                      //oculto el mensaje de valor total carrito
 
 });
 
@@ -167,6 +169,7 @@ botonCelulares.addEventListener("click",()=>{
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
     mostrarBarraBusqueda()                                          //muestro la barra de busqueda
+    ocultarValorTotalCarrito()                                      //oculto el mensaje de valor total carrito
 });
 
 let botonCarrito = document.getElementById("menuCarrito");          //Botón Carrito
