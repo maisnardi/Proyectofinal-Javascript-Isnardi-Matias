@@ -101,7 +101,7 @@ function confirmarCompra()
     sweetalert.addEventListener("click",()=>{
         swal({
         title: "Gracias por su compra",
-        text: "Precione continuar para volver al inicio!",
+        text: "Presione continuar para volver al inicio!",
         icon: "success",
         button: "Continuar",
       }).then(function() {
@@ -112,8 +112,68 @@ function confirmarCompra()
 
 }
 confirmarCompra();
-
+//funcion que elimina los elementos del carrito del localStorage
 function limpiarLocalStorage()
 {
     localStorage.removeItem("ProductosCarrito");
 }
+
+
+//funcion q redirecciona al carrito cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonMenuCarritoProdcuto()
+{
+    const boton=document.getElementById("menuCarritoCheckout");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(1));
+        window.location = "../index.html"
+    });
+}
+botonMenuCarritoProdcuto();
+
+//funcion q redirecciona al los auriculares cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonAuricularesProducto()
+{
+    const boton=document.getElementById("menuAuricularesCheckout");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(2));
+        window.location = "../index.html"
+    });
+}
+botonAuricularesProducto();
+
+//funcion q redirecciona al los accesorios cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonAccesoriosProducto()
+{
+    const boton=document.getElementById("menuAccesoriosCheckout");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(3));
+        window.location = "../index.html"
+    });
+}
+botonAccesoriosProducto();
+
+//funcion q redirecciona al los celulares cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonCelularesProducto()
+{
+    const boton=document.getElementById("menuCelularesCheckout");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(4));
+        window.location = "../index.html"
+    });
+}
+botonCelularesProducto();
+
+
+document.addEventListener("DOMContentLoaded", ()=> {
+    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+  });
+  
+  function validarFormulario(evento) {
+    evento.preventDefault();
+    let usuario = document.getElementById('apellido').value;
+    if(usuario.length == 0) {
+      alert('No has escrito nada en el usuario');
+      return;
+    }
+    this.submit();
+  }

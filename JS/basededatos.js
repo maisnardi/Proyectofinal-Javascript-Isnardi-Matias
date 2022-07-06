@@ -1,5 +1,5 @@
 //Base de datos de productos
-//Base de datos de productos
+
 const auriculares=[
     {
         id:"A001",
@@ -157,4 +157,3 @@ const telefonos=[
 const todosLosProductos=auriculares.concat(accesorios,telefonos);
 const Carrito =[];
 const Checkout=[];
-

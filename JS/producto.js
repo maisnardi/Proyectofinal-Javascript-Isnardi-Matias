@@ -1,3 +1,4 @@
+let mostrarCarrito=false;
 let datoUnidadesCarrito;
 function sessionStoragetoProducto()
 {
@@ -87,3 +88,67 @@ function actualizarUnidadesLocalStorage(dato){
     console.log(dato)
     localStorage.setItem('unidades',Number(dato));
  }
+ 
+//funcion q redirecciona al carrito cuando se hace click en la imagen del carrito desde la pagina de productos
+function botonCarritoProdcuto()
+{
+    const boton=document.getElementById("linkCarritoUnidadesProducto");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(1));
+        window.location = "../index.html"
+    });
+}
+botonCarritoProdcuto();
+
+//funcion q redirecciona al carrito cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonMenuCarritoProdcuto()
+{
+    const boton=document.getElementById("menuCarritoProductos");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(1));
+        window.location = "../index.html"
+    });
+}
+botonMenuCarritoProdcuto();
+
+//funcion q redirecciona al los auriculares cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonAuricularesProducto()
+{
+    const boton=document.getElementById("menuAuricularesProductos");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(2));
+        window.location = "../index.html"
+    });
+}
+botonAuricularesProducto();
+
+//funcion q redirecciona al los accesorios cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonAccesoriosProducto()
+{
+    const boton=document.getElementById("menuAccesoriosProductos");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(3));
+        window.location = "../index.html"
+    });
+}
+botonAccesoriosProducto();
+
+//funcion q redirecciona al los celulares cuando se hace click carrito desde el menu lateral desde la pagina de productos
+function botonCelularesProducto()
+{
+    const boton=document.getElementById("menuCelularesProductos");
+    boton.addEventListener("click", ()=>{
+        localStorage.setItem("flagPagina",JSON.stringify(4));
+        window.location = "../index.html"
+    });
+}
+botonCelularesProducto()
+
+//funcion que muestra en pantalla las unidades productos totales del carrito
+function mostraElementosCarritos()
+{
+    let unidades=getUnidadesLocalStorage();
+    const numero=document.getElementsByClassName("unidadesCarrito");
+    numero[0].innerHTML=unidades;
+}
+mostraElementosCarritos();

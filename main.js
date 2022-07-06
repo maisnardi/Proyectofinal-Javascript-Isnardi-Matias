@@ -1,5 +1,6 @@
 //variables globales
 let pagina="index";
+console.log(pagina);
 let divisa=localStorage.getItem("moneda");
 let btnCompra=false;
 
@@ -50,6 +51,7 @@ function pasarPreciosAPesos(cotizacion)
     });
     crearProductos(todosLosProductos);                                  //se llama a la funcion que crea todos los elementos HTML y se le pasa como argumento el array de todos los productos
     mostrarBarraBusqueda();                                                         //muestro la barra de busqueda
+    mostrarCarritoDesdeProductos()
 
 };
 
@@ -111,7 +113,8 @@ function crearProductos(array)
     const titulo= document.getElementById("titulo");
     const app = document.getElementById("app");
     for (const items of array) {
-        if(pagina==="index")
+        console.log(pagina);
+        if(pagina=="index")
         {
             titulo.innerText=`Productos:`;
         }
@@ -140,11 +143,19 @@ function crearProductos(array)
     ocultarValoresDolares();                                         //llamo a la funcion que oculta los valores en dolares   
     ejecutarFunciones();                                             //llamo a la funcion que ejecuta varias funciones
 }
+let botonIndex = document.getElementById("index");                  //Botón index
+botonIndex.addEventListener("click",()=>{
+    pagina="index";
+    localStorage.setItem("pagina",JSON.stringify(pagina));
+    window.location = "index.html"
+    document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
+});
 
 //botones del menú lateral
 let botonAuriculares = document.getElementById("menuAuriculares");  //Botón auriculares
 botonAuriculares.addEventListener("click",()=>{
     pagina="Auriculares";
+    localStorage.setItem("pagina",JSON.stringify("Auriculares"));
     ocultarProductos("col");                                        //oculta todos los prodctos de la página
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
@@ -154,6 +165,7 @@ botonAuriculares.addEventListener("click",()=>{
 let botonAccesorios = document.getElementById("menuAccesorios");   //Botón accesorios
 botonAccesorios.addEventListener("click",()=>{
     pagina="Accesorios";
+    localStorage.setItem("pagina",JSON.stringify("Accesorios"));
     ocultarProductos("col");                                        //oculta todos los prodctos de la página
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
@@ -165,6 +177,7 @@ botonAccesorios.addEventListener("click",()=>{
 let botonCelulares = document.getElementById("menuCelulares");      //Botón teléfonos
 botonCelulares.addEventListener("click",()=>{
     pagina="Celulares";
+    localStorage.setItem("pagina",JSON.stringify("Celulares"));
     ocultarProductos("col");                                        //oculta todos los prodctos de la página
     mostrarProductos(pagina);                                       //muestra solo los productos que sean igual el valor de página
     document.getElementById("titulo").innerHTML=pagina+":";         //cambia el titulo de los productos
@@ -483,6 +496,14 @@ function inicializarLocalStorage()
         const moneda=document.getElementById("moneda");
         moneda.value=Number(localStorage.getItem("moneda"));
     }
+    if(localStorage.getItem("flagPagina")===null)         //verifico si existe el flag del la pagina en el localStorage si no existe lo inicializo vacio
+    {
+        localStorage.setItem("flagPagina",JSON.stringify(false));
+    }
+    if(localStorage.getItem("pagina")===null)         //verifico si existe la variable pagina en el localStorage si no existe lo inicializo vacio
+    {
+        localStorage.setItem("pagina",JSON.stringify("index"));
+    }
 }
 
 inicializarLocalStorage();
@@ -527,5 +548,56 @@ function mostrarBarraBusqueda()
 {
     const containerBuscador=document.getElementById("contenedorBuscador");                       //selecciono el container del buscador
     containerBuscador.style.display="";
+}
+
+function mostrarCarritoDesdeProductos()
+{
+    flagPagina=localStorage.getItem("flagPagina");
+    console.log(typeof(flagPagina));
+    switch (Number(flagPagina)){
+        case 1:
+            localStorage.setItem("flagPagina",JSON.stringify(0));
+            ocultarProductos("col");                                                //Oculto todos los productos disponibles en la pagina, del inicio
+            MostrarCarrito(Carrito);                                                //muestro los elementos del carrito
+            crearBotonesEliminar();                                                 //creo los botones para eliminar el producto del carrito
+            setValorTotalCarrito();                                                 //funcion que crea el elemento que muestra el valor total del carrito
+            ocultarBarraBusqueda();                                                 //oculto la barra de busqueda
+            break;
+        case 2:
+            pagina="Auriculares";
+            localStorage.setItem("pagina",JSON.stringify("Auriculares"));
+            localStorage.setItem("flagPagina",JSON.stringify(0));
+            ocultarProductos("col");                                                //oculta todos los prodctos de la página
+            mostrarProductos(pagina);                                               //muestra solo los productos que sean igual el valor de página
+            document.getElementById("titulo").innerHTML=pagina+":";                 //cambia el titulo de los productos
+            mostrarBarraBusqueda()                                                  //muestro la barra de busqueda
+            ocultarValorTotalCarrito()                                              //oculto el mensaje de valor total carrito
+            break;
+        case 3:
+            pagina="Accesorios";
+            localStorage.setItem("pagina",JSON.stringify("Accesorios"));
+            localStorage.setItem("flagPagina",JSON.stringify(0));
+            ocultarProductos("col");                                                //oculta todos los prodctos de la página
+            mostrarProductos(pagina);                                               //muestra solo los productos que sean igual el valor de página
+            document.getElementById("titulo").innerHTML=pagina+":";                 //cambia el titulo de los productos
+            mostrarBarraBusqueda()                                                  //muestro la barra de busqueda
+            ocultarValorTotalCarrito()                                              //oculto el mensaje de valor total carrito
+            break;
+        case 4:
+            pagina="Celulares";
+            localStorage.setItem("pagina",JSON.stringify("Celulares"));
+            localStorage.setItem("flagPagina",JSON.stringify(0));
+            ocultarProductos("col");                                                //oculta todos los prodctos de la página
+            mostrarProductos(pagina);                                               //muestra solo los productos que sean igual el valor de página
+            document.getElementById("titulo").innerHTML=pagina+":";                 //cambia el titulo de los productos
+            mostrarBarraBusqueda()                                                  //muestro la barra de busqueda
+            ocultarValorTotalCarrito()                                              //oculto el mensaje de valor total carrito
+            break;
+        
+        default:
+            localStorage.setItem("flagPagina",JSON.stringify(0));
+            break;
+    }
+    
 }
 
